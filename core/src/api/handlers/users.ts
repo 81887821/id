@@ -148,8 +148,7 @@ export function sendChangePasswordEmail(model: Model, config: Config): IMiddlewa
         resendCount = await model.users.getResendCount(c, token)
       })
     } catch (e) {
-      // no such entry, but do nothing and just return 200
-      ctx.status = 200
+      ctx.status = 404
       return
     }
 

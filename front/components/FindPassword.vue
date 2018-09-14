@@ -60,6 +60,10 @@ export default class ValidateForm extends Vue {
     ko: '메일 전송 실패',
     en: 'Mail delivery failed',
   }
+  private readonly unregisteredEmailTrans: Translation = {
+    ko: '등록되지 않은 이메일입니다.',
+    en: 'Unregistered email address.',
+  }
 
   @Provide()
   private rules = {
@@ -109,12 +113,13 @@ export default class ValidateForm extends Vue {
       emailDomain: this.emailDomain,
     }, { validateStatus: () => true })
 
-    if (response.status !== 200) {
+    if (response.status === 200) {
+      this.isEmailSent = true
+    } else if (response.status === 404) {
+      this.$notify.error(this.unregisteredEmailTrans[this.lang])
+    } else {
       this.$notify.error(this.failTrans[this.lang])
-      return
     }
-
-    this.isEmailSent = true
   }
 
 }
